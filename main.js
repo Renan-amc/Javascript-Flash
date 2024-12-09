@@ -163,21 +163,12 @@ function galleryHandler() {
 
 // Products Section
 
-function productsHandler() {
+function populateProducts(productList) {
 
     let productsSection = document.querySelector(".products-area");
-    let freeProducts = products.filter(function(item){
-        return !item.price || item.price<= 0;
-    });
-    let paidProducts = products.filter(function(item){
-        return item.price > 0;
-    });
-
-    console.log("free: ", freeProducts);
-    console.log("paid: ", paidProducts);
-
+    productsSection.textContent = "";
     // Run a loop through the products and create an HTML element ("product-item") for each of them
-    products.forEach(function(product, index){
+    productList.forEach(function(product, index){
 
         // Create the HTML element for the individual product
         let productElm = document.createElement("div");
@@ -219,11 +210,34 @@ function productsHandler() {
         // Add complete individual product to the product section
         productsSection.append(productElm); 
     });
+}
+
+function productsHandler() {
+    let freeProducts = products.filter(function(item){
+        return !item.price || item.price<= 0;
+    });
+    let paidProducts = products.filter(function(item){
+        return item.price > 0;
+    });
+
+    populateProducts(freeProducts)
 
     let totalProducts = products.length;
     document.querySelector(".products-filter label[for=all] span.product-amount").textContent = totalProducts;
     document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
     document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
+
+    let productsFilter = document.querySelector(".products-filter");
+    
+    productsFilter.addEventListener("click", function(e){
+        if (e.target.id == "all") {
+            populateProducts(products);
+        } else if (e.target.id == "paid") {
+            populateProducts(paidProducts);
+        } else if (e.target.id == "free") {
+            populateProducts(freeProducts);
+        }
+    });
 }
 
 // Page Load
