@@ -163,19 +163,18 @@ function galleryHandler() {
 
 // Products Section
 
-    /*<div class="product-item">
-        <img src="./assets/products/img6.png" alt="AstroFiction">
-            <div class="product-details">
-                <h3 class="product-title">AstroFiction</h3>
-                <p class="product-author">John Doe</p>
-                <p class="price-title">Price</p>
-                <p class="product-price">$ 49.90</p>
-            </div>
-    </div>*/
-
 function productsHandler() {
 
     let productsSection = document.querySelector(".products-area");
+    let freeProducts = products.filter(function(item){
+        return !item.price || item.price<= 0;
+    });
+    let paidProducts = products.filter(function(item){
+        return item.price > 0;
+    });
+
+    console.log("free: ", freeProducts);
+    console.log("paid: ", paidProducts);
 
     // Run a loop through the products and create an HTML element ("product-item") for each of them
     products.forEach(function(product, index){
@@ -220,6 +219,11 @@ function productsHandler() {
         // Add complete individual product to the product section
         productsSection.append(productElm); 
     });
+
+    let totalProducts = products.length;
+    document.querySelector(".products-filter label[for=all] span.product-amount").textContent = totalProducts;
+    document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
+    document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
 }
 
 // Page Load
