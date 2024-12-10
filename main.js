@@ -1,3 +1,6 @@
+const weatherAPIKey = "de519b38ab4b7cc8b66e5d91719293fe";
+const weatherAPIURL = `https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}`;
+
 const galleryImages = [
     {
         src: "./assets/gallery/image1.jpg",
@@ -213,12 +216,8 @@ function populateProducts(productList) {
 }
 
 function productsHandler() {
-    let freeProducts = products.filter(function(item){
-        return !item.price || item.price<= 0;
-    });
-    let paidProducts = products.filter(function(item){
-        return item.price > 0;
-    });
+    let freeProducts = products.filter( item => !item.price || item.price<= 0) ;
+    let paidProducts = products.filter(item => item.price > 0 );
 
     populateProducts(freeProducts)
 
@@ -240,6 +239,25 @@ function productsHandler() {
     });
 }
 
+function footerHandler() {
+    let currentYear = new Date().getFullYear();
+    document.querySelector("footer").textContent = `© ${currentYear} - All rights reserved`;
+}
+
+
+navigator.geolocation.getCurrentPosition( position => {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    let url = weatherAPIURL
+        .replace("{lat}", latitude)
+        .replace("{lon}", longitude)
+        .replace("{API key}", weatherAPIKey);
+    console.log(url);
+    fetch(url)
+    .then(response => response.json())
+    .then(data => console.log(data))
+});
+
 // Page Load
 
 menuHandler();
@@ -247,3 +265,4 @@ greetingHandler();
 clockHandler();
 galleryHandler();
 productsHandler();
+footerHandler();
